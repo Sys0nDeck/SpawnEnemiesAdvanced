@@ -8,17 +8,25 @@ namespace SpawnEnemiesAdvanced
 
         public void Initialize(Enemy enemy)
         {
-            enemy.gameObject.transform.position = transform.position;
+            enemy.transform.position = transform.position;
 
             if ( _target == null )
             {
                 Debug.Log($"{name}'s target is null");
-                enemy.GetComponent<RotationController>().SetTarget(transform);
+                SetTargetToEnemy(enemy, transform);
             }
             else
             {
-                enemy.GetComponent<RotationController>().SetTarget(_target.transform);
+                SetTargetToEnemy(enemy, _target.transform);
             }
+        }
+
+        private void SetTargetToEnemy(Enemy enemy, Transform targetPosition)
+        {
+            if (enemy.TryGetComponent<RotationController>(out var rotationController))
+                rotationController.SetTarget(targetPosition);
+            else
+                Debug.Log($"{enemy.name} have't component {nameof(RotationController)} for functional");
         }
     }
 }

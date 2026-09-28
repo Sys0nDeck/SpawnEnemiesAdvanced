@@ -32,12 +32,12 @@ namespace SpawnEnemiesAdvanced
 
         private void OnEnable()
         {
-            _timeLooper.OnLoop += Spawn;
+            _timeLooper.TimeTicked += Spawn;
         }
 
         private void OnDisable()
         {
-            _timeLooper.OnLoop -= Spawn;
+            _timeLooper.TimeTicked -= Spawn;
         }
 
         private void Start()
@@ -61,13 +61,13 @@ namespace SpawnEnemiesAdvanced
         {
             _enemyInitializator.Initialize(enemy);
             enemy.gameObject.SetActive(true);
-            enemy.OnDead += ReturnEnemyInPool;
+            enemy.EnemyDead += ReturnEnemyInPool;
         }
 
         private void ReleaseEnemy(Enemy enemy)
         {
             enemy.gameObject.SetActive(false);
-            enemy.OnDead -= ReturnEnemyInPool;
+            enemy.EnemyDead -= ReturnEnemyInPool;
         }
 
         private void ReturnEnemyInPool(Enemy enemy)

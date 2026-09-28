@@ -10,7 +10,7 @@ namespace SpawnEnemiesAdvanced
         [SerializeField] private WaypointHandler _waypointHandler;
         private ArrivalNotifier _arrivalNotifier;
 
-        public event Action<Waypoint> OnWaypointChanged;
+        public event Action<Waypoint> WaypointChanged;
 
         private void Awake()
         {
@@ -24,19 +24,19 @@ namespace SpawnEnemiesAdvanced
 
         private void OnEnable()
         {
-            _arrivalNotifier.OnTargetApproached += SendNextWaypoint;
+            _arrivalNotifier.TargetApproached += SendNextWaypoint;
         }
 
         private void OnDisable()
         {
-           _arrivalNotifier.OnTargetApproached -= SendNextWaypoint;
+           _arrivalNotifier.TargetApproached -= SendNextWaypoint;
         }
 
         private void SendNextWaypoint()
         {
             var newWaypoint = _waypointHandler.GetWaypoint();
-            OnWaypointChanged?.Invoke(newWaypoint);
-            _arrivalNotifier.SetNewTarget(newWaypoint.gameObject);
+            WaypointChanged?.Invoke(newWaypoint);
+            _arrivalNotifier.SetNewTarget(newWaypoint.transform);
         }
     }
 }

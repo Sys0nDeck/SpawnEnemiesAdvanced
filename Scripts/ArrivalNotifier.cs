@@ -5,10 +5,10 @@ namespace SpawnEnemiesAdvanced
 {
     public class ArrivalNotifier : MonoBehaviour
     {
-        private GameObject _target;
+        private Transform _target;
         private float _minDistanceToTarget = 0.2f;
 
-        public event Action OnTargetApproached;
+        public event Action TargetApproached;
 
         private void Update()
         {
@@ -19,19 +19,20 @@ namespace SpawnEnemiesAdvanced
                 NotifyArrival();
         }
 
-        public void SetNewTarget(GameObject target)
+        public void SetNewTarget(Transform target)
         {
             _target = target;
         }
 
         private bool IsReached(Vector3 target)
         {
-            var distance = Vector3.Distance(transform.position, target);
-            return distance <= _minDistanceToTarget;
+            var offset = target - transform.position;
+            float sqrLength = offset.sqrMagnitude;
+            return sqrLength <= Mathf.Pow(_minDistanceToTarget, 2);
         }
 
         private void NotifyArrival()
-            => OnTargetApproached?.Invoke();
+            => TargetApproached?.Invoke();
     }
 }
 

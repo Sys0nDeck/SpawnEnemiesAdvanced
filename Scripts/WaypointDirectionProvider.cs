@@ -19,12 +19,12 @@ namespace SpawnEnemiesAdvanced
 
         private void OnEnable()
         {
-            _waypointFollower.OnWaypointChanged += TrackNewWaypoint;
+            _waypointFollower.WaypointChanged += TrackNewWaypoint;
         }
 
         private void OnDisable()
         {
-            _waypointFollower.OnWaypointChanged -= TrackNewWaypoint;
+            _waypointFollower.WaypointChanged -= TrackNewWaypoint;
         }
 
         private void TrackNewWaypoint(Waypoint waypoint)

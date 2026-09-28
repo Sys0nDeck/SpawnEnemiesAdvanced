@@ -4,21 +4,21 @@ namespace SpawnEnemiesAdvanced
 {
     public class RotationController : MonoBehaviour
     {
-        private Transform _targetTransform;
+        private Transform _targetPosition;
 
         private void Update()
         {
             Rotate();
         }
 
-        public void SetTarget(Transform targetTransform)
+        public void SetTarget(Transform targetPosition)
         {
-            _targetTransform = targetTransform;
+            _targetPosition = targetPosition;
         }
 
         private void Rotate()
         {
-            transform.LookAt(_targetTransform);
+            transform.LookAt(_targetPosition);
         }
     }
 }

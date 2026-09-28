@@ -10,7 +10,7 @@ namespace SpawnEnemiesAdvanced
 
         private Coroutine _coroutine;
 
-        public event Action OnLoop;
+        public event Action TimeTicked;
 
         public void Run()
         {
@@ -30,7 +30,7 @@ namespace SpawnEnemiesAdvanced
             while (true)
             {
                 yield return time;
-                OnLoop?.Invoke();
+                TimeTicked?.Invoke();
             }
         }
     }

@@ -5,11 +5,11 @@ namespace SpawnEnemiesAdvanced
 {
     public class Enemy : MonoBehaviour
     {
-        public event Action<Enemy> OnDead;
+        public event Action<Enemy> EnemyDead;
 
         public void Die()
         {
-            OnDead?.Invoke(this);
+            EnemyDead?.Invoke(this);
         }
     }
 }
