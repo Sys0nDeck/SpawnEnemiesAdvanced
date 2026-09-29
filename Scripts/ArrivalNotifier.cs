@@ -5,23 +5,19 @@ namespace SpawnEnemiesAdvanced
 {
     public class ArrivalNotifier : MonoBehaviour
     {
-        private Transform _target;
         private float _minDistanceToTarget = 0.2f;
 
         public event Action TargetApproached;
 
+        public Transform Target { get; set; }
+
         private void Update()
         {
-            if (_target == null)
+            if (Target == null)
                 return;
 
-            if (IsReached(_target.transform.position))
-                NotifyArrival();
-        }
-
-        public void SetNewTarget(Transform target)
-        {
-            _target = target;
+            if (IsReached(Target.position))
+                Notify();
         }
 
         private bool IsReached(Vector3 target)
@@ -31,7 +27,7 @@ namespace SpawnEnemiesAdvanced
             return sqrLength <= Mathf.Pow(_minDistanceToTarget, 2);
         }
 
-        private void NotifyArrival()
+        private void Notify()
             => TargetApproached?.Invoke();
     }
 }

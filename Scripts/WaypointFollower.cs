@@ -36,7 +36,7 @@ namespace SpawnEnemiesAdvanced
         {
             var newWaypoint = _waypointHandler.GetWaypoint();
             WaypointChanged?.Invoke(newWaypoint);
-            _arrivalNotifier.SetNewTarget(newWaypoint.transform);
+            _arrivalNotifier.Target = newWaypoint.transform;
         }
     }
 }
