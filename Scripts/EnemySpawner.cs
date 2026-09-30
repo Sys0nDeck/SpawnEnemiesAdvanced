@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace SpawnEnemiesAdvanced
 {
@@ -8,7 +6,7 @@ namespace SpawnEnemiesAdvanced
     [RequireComponent(typeof(SpawnPointSelector))]
     public class EnemySpawner : MonoBehaviour
     {
-        [SerializeField] private TimeLooper _timeLooper;
+        [SerializeField] private Timer _timeLooper;
 
         private EnemyPool _enemyPool;
         private SpawnPointSelector _spawnPointSelector;
@@ -53,8 +51,7 @@ namespace SpawnEnemiesAdvanced
             if (enemy == null)
                 return;
 
-            enemy.transform.position = spawnPoint.transform.position;
-            enemy.Init(spawnPoint.GetTarget);
+            spawnPoint.InitEnemy(enemy);
             enemy.gameObject.SetActive(true);
             enemy.EnemyDead += ReturnEnemyInPool;
         }

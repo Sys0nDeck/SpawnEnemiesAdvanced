@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace SpawnEnemiesAdvanced
@@ -10,12 +9,17 @@ namespace SpawnEnemiesAdvanced
         [SerializeField] private float _gizmosSphereRadius = 2f;
 
         public Enemy GetPrefab => _prefab;
-        public Target GetTarget => _target;
 
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, _gizmosSphereRadius);
+        }
+
+        public void InitEnemy(Enemy enemy)
+        {
+            enemy.transform.position = transform.position;
+            enemy.Init(_target);
         }
     }
 }
