@@ -6,7 +6,7 @@ namespace SpawnEnemiesAdvanced
 {
     public class TimeLooper : MonoBehaviour
     {
-        [SerializeField] private float _loopDelay;
+        [SerializeField] private float _loopDelay = 2;
 
         private Coroutine _coroutine;
 

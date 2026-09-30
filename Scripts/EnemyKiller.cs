@@ -19,7 +19,7 @@ namespace SpawnEnemiesAdvanced
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<Enemy>(out var enemy))
+            if (other.TryGetComponent(out Enemy enemy))
             {
                 enemy.Die();
             }

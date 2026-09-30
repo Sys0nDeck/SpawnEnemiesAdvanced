@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace SpawnEnemiesAdvanced
 {
-    public class WaypointHandler : MonoBehaviour
+    public class WaypointRepos : MonoBehaviour
     {
-        [SerializeField] private GameObject _waypointsParent;
         [SerializeField] private List<Waypoint> _waypoints;
 
         private IEnumerator<Waypoint> _waypointEnumerator;
@@ -31,16 +30,7 @@ namespace SpawnEnemiesAdvanced
         [ContextMenu("Fill Waypoints")]
         public void FillWaypoints()
         {
-            if (_waypointsParent == null)
-                return;
-
-            var waypoints = _waypointsParent.GetComponentsInChildren<Waypoint>();
-            _waypoints.Clear();
-
-            foreach (var waypoint in waypoints)
-            {
-                _waypoints.Add(waypoint);
-            }      
+            _waypoints = new List<Waypoint>(GetComponentsInChildren<Waypoint>());     
         }
 
         public Waypoint GetWaypoint()

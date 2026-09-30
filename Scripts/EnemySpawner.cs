@@ -4,40 +4,29 @@ using UnityEngine.Pool;
 
 namespace SpawnEnemiesAdvanced
 {
-    [RequireComponent(typeof(EnemyInitializator))]
+    [RequireComponent(typeof(EnemyPool))]
+    [RequireComponent(typeof(SpawnPointSelector))]
     public class EnemySpawner : MonoBehaviour
     {
-        [SerializeField] private Enemy _prefab;
         [SerializeField] private TimeLooper _timeLooper;
-        [SerializeField] private int _poolCapacity = 5;
-        [SerializeField] private int _poolMaxSize = 15;
 
-        private ObjectPool<Enemy> _enemyPool;
-        private Coroutine _coroutine;
-        private EnemyInitializator _enemyInitializator;
+        private EnemyPool _enemyPool;
+        private SpawnPointSelector _spawnPointSelector;
 
         private void Awake()
         {
-            _enemyPool = new ObjectPool<Enemy>(
-                createFunc: () => CreateEnemy(),
-                actionOnGet: (enemy) => GetEnemy(enemy),
-                actionOnRelease: (enemy) => ReleaseEnemy(enemy),
-                actionOnDestroy: (enemy) => Destroy(enemy),
-                collectionCheck: true,
-                defaultCapacity: _poolCapacity,
-                maxSize: _poolMaxSize
-                );
-            _enemyInitializator = GetComponent<EnemyInitializator>();
+            _spawnPointSelector = GetComponent<SpawnPointSelector>();
+            _enemyPool = GetComponent<EnemyPool>();
         }
 
         private void OnEnable()
         {
-            _timeLooper.TimeTicked += Spawn;
+            _timeLooper.TimeTicked += SpawnOnPoint;
         }
 
         private void OnDisable()
         {
-            _timeLooper.TimeTicked -= Spawn;
+            _timeLooper.TimeTicked -= SpawnOnPoint;
         }
 
         private void Start()
@@ -45,33 +34,41 @@ namespace SpawnEnemiesAdvanced
             _timeLooper.Run();
         }
 
-        private void Spawn()
+        private void SpawnOnPoint()
         {
-            _enemyPool.Get();
+            if (_spawnPointSelector.IsEmpty)
+            {
+                Debug.Log("Spawn point is empty");
+                return;
+            }
+
+            var spawnPoint = _spawnPointSelector.GetRandomSpawnPoint();
+            SpawnOn(spawnPoint);
         }
 
-        private Enemy CreateEnemy()
+        private void SpawnOn(SpawnPoint spawnPoint)
         {
-            var newEnemy = Instantiate(_prefab);
-            newEnemy.gameObject.SetActive(false);
-            return newEnemy;
-        }
+            var enemy = _enemyPool.Get(spawnPoint.GetPrefab);
 
-        private void GetEnemy(Enemy enemy)
-        {
-            _enemyInitializator.Initialize(enemy);
+            if (enemy == null)
+                return;
+
+            enemy.transform.position = spawnPoint.transform.position;
+            enemy.Init(spawnPoint.GetTarget);
             enemy.gameObject.SetActive(true);
             enemy.EnemyDead += ReturnEnemyInPool;
         }
 
         private void ReleaseEnemy(Enemy enemy)
         {
-            enemy.gameObject.SetActive(false);
+            _enemyPool.Repease(enemy);
             enemy.EnemyDead -= ReturnEnemyInPool;
         }
 
         private void ReturnEnemyInPool(Enemy enemy)
-            => _enemyPool.Release(enemy);
+        {
+            ReleaseEnemy(enemy);
+        }
     }
 }
 

@@ -4,16 +4,19 @@ using UnityEngine;
 
 namespace SpawnEnemiesAdvanced
 {
-    [RequireComponent(typeof(RotationController))]
+    [RequireComponent(typeof(Rotator))]
+    [RequireComponent(typeof(Mover))]
     [RequireComponent(typeof(WaypointFollower))]
     public class WaypointDirectionProvider : MonoBehaviour
     {
-        private RotationController _rotationController;
+        private Rotator _rotator;
+        private Mover _mover;
         private WaypointFollower _waypointFollower;
 
         private void Awake()
         {
-            _rotationController = GetComponent<RotationController>();
+            _rotator = GetComponent<Rotator>();
+            _mover = GetComponent<Mover>();
             _waypointFollower = GetComponent<WaypointFollower>();
         }
 
@@ -29,7 +32,8 @@ namespace SpawnEnemiesAdvanced
 
         private void TrackNewWaypoint(Waypoint waypoint)
         {
-            _rotationController.SetTarget(waypoint.transform);
+            _mover.SetTarget(waypoint.transform);
+            _rotator.SetTarget(waypoint.transform);
         }
     }
 }

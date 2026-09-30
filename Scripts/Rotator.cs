@@ -2,21 +2,21 @@ using UnityEngine;
 
 namespace SpawnEnemiesAdvanced
 {
-    public class RotationController : MonoBehaviour
+    public class Rotator : MonoBehaviour
     {
         private Transform _targetPosition;
 
         private void Update()
         {
-            Rotate();
+            RotateOnTarget();
         }
 
-        public void SetTarget(Transform targetPosition)
+        public void SetTarget(Transform target)
         {
-            _targetPosition = targetPosition;
+            _targetPosition = target;
         }
 
-        private void Rotate()
+        private void RotateOnTarget()
         {
             transform.LookAt(_targetPosition);
         }

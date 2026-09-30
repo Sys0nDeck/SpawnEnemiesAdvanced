@@ -5,30 +5,34 @@ namespace SpawnEnemiesAdvanced
 {
     public class ArrivalNotifier : MonoBehaviour
     {
-        private float _minDistanceToTarget = 0.2f;
+        private float _minDistanceToWaypoint = 0.2f;
+        private Waypoint _waypoint;
 
-        public event Action TargetApproached;
-
-        public Transform Target { get; set; }
+        public event Action WaypointApproached;
 
         private void Update()
         {
-            if (Target == null)
+            if (_waypoint == null)
                 return;
 
-            if (IsReached(Target.position))
+            if (IsReached(_waypoint))
                 Notify();
         }
 
-        private bool IsReached(Vector3 target)
+        public void SetWaypoint(Waypoint waypoint)
         {
-            var offset = target - transform.position;
+            _waypoint = waypoint;
+        }
+
+        private bool IsReached(Waypoint waypoint)
+        {
+            var offset = waypoint.transform.position - transform.position;
             float sqrLength = offset.sqrMagnitude;
-            return sqrLength <= Mathf.Pow(_minDistanceToTarget, 2);
+            return sqrLength <= Mathf.Pow(_minDistanceToWaypoint, 2);
         }
 
         private void Notify()
-            => TargetApproached?.Invoke();
+            => WaypointApproached?.Invoke();
     }
 }
 

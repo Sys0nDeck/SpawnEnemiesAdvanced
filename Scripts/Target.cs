@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace SpawnEnemiesAdvanced
 {
-    public class Target : MonoBehaviour
-    {
-        
-    }
+    [RequireComponent(typeof(ArrivalNotifier))]
+    [RequireComponent(typeof(WaypointFollower))]
+    [RequireComponent(typeof(WaypointDirectionProvider))]
+    [RequireComponent(typeof(EnemyKiller))]
+    public class Target : MonoBehaviour { }
 }
 

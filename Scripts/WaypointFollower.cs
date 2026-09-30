@@ -7,7 +7,7 @@ namespace SpawnEnemiesAdvanced
     [RequireComponent(typeof(ArrivalNotifier))]
     public class WaypointFollower : MonoBehaviour
     {
-        [SerializeField] private WaypointHandler _waypointHandler;
+        [SerializeField] private WaypointRepos _waypointRepos;
         private ArrivalNotifier _arrivalNotifier;
 
         public event Action<Waypoint> WaypointChanged;
@@ -24,19 +24,25 @@ namespace SpawnEnemiesAdvanced
 
         private void OnEnable()
         {
-            _arrivalNotifier.TargetApproached += SendNextWaypoint;
+            _arrivalNotifier.WaypointApproached += SendNextWaypoint;
         }
 
         private void OnDisable()
         {
-           _arrivalNotifier.TargetApproached -= SendNextWaypoint;
+           _arrivalNotifier.WaypointApproached -= SendNextWaypoint;
         }
 
         private void SendNextWaypoint()
         {
-            var newWaypoint = _waypointHandler.GetWaypoint();
+            if (_waypointRepos == null)
+            {
+                Debug.Log("Waypoint is empty");
+                return;
+            }
+
+            var newWaypoint = _waypointRepos.GetWaypoint();
             WaypointChanged?.Invoke(newWaypoint);
-            _arrivalNotifier.Target = newWaypoint.transform;
+            _arrivalNotifier.SetWaypoint(newWaypoint);
         }
     }
 }
