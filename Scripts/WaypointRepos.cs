@@ -6,6 +6,7 @@ namespace SpawnEnemiesAdvanced
     public class WaypointRepos : MonoBehaviour
     {
         [SerializeField] private List<Waypoint> _waypoints;
+        [SerializeField] private Color _lineColor = Color.green;
 
         private IEnumerator<Waypoint> _waypointEnumerator;
         private int _currentWaypointIndex;
@@ -22,7 +23,7 @@ namespace SpawnEnemiesAdvanced
 
             if (positions != null)
             {
-                Gizmos.color = Color.green;
+                Gizmos.color = _lineColor;
                 Gizmos.DrawLineStrip(positions, false);
             }
         }
